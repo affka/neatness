@@ -1,0 +1,18 @@
+<script type="text/javascript" src="../../Joints.js"></script>
+<script>
+
+
+    Joints.defineClass('tests.web.BaseClass', {
+    });
+    Joints.defineClass('tests.web.MyClass', {
+        __extends: tests.web.BaseClass
+    });
+
+    var obj = {
+        base: new tests.web.BaseClass,
+        myClass: new tests.web.MyClass()
+    };
+
+    console.log(obj);
+
+</script>
