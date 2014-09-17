@@ -19,7 +19,7 @@ module.exports = {
 			prototypeProperties: null,
 			staticProperties: null,
 			format: null,
-			mixes: []
+			mixins: []
 		};
 
 		// Joints v0.2 (old) format
@@ -45,9 +45,13 @@ module.exports = {
 				delete optionsOrExtend.__static;
 			}
 
-			if (optionsOrExtend.hasOwnProperty('__mixes')) {
-				params.mixes = [].concat[optionsOrExtend.__mixes];
-				delete optionsOrExtend.__mixes;
+			if (optionsOrExtend.hasOwnProperty('__mixins')) {
+				params.mixins = params.mixins.concat(optionsOrExtend.__mixins);
+				delete optionsOrExtend.__mixins;
+			}
+			if (optionsOrExtend.hasOwnProperty('__mixin')) {
+				params.mixins = params.mixins.concat(optionsOrExtend.__mixin);
+				delete optionsOrExtend.__mixin;
 			}
 
 			params.format = FORMAT_JOINTS_V10;

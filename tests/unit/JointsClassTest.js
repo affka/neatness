@@ -272,11 +272,11 @@ exports.mixinsTest = function(test) {
 
 	// by __mixin property
 	Joints.defineClass('tests.MyMixObject1', {
-		__mixes: tests.MyMixin
+		__mixins: tests.MyMixin
 	});
 
 	var myMixObject1 = new tests.MyMixObject1();
-	test.strictEqual(tests.MyMixObject1.mixinProp, 10);
+	test.strictEqual(tests.MyMixObject1.staticMixinProp, 10);
 	test.strictEqual(tests.MyMixObject1.staticMixinGet(), 20);
 	test.strictEqual(myMixObject1.mixinProp, 30);
 	test.strictEqual(myMixObject1.mixinGet(), 40);
@@ -313,21 +313,76 @@ exports.multipleMixinsTest = function(test) {
 	});
 
 	Joints.defineClass('tests.MultiMixObject', {
-		__mixes: [
+		__mixins: [
 			tests.Mixin1,
 			tests.Mixin2
 		]
 	});
 
 	var multiMixObject = new tests.MultiMixObject();
-	test.strictEqual(tests.MultiMixObject.mixinProp, 10);
+	test.strictEqual(tests.MultiMixObject.staticMixinProp, 10);
 	test.strictEqual(tests.MultiMixObject.staticMixinGet(), 20);
 	test.strictEqual(multiMixObject.mixinProp, 30);
 	test.strictEqual(multiMixObject.mixinGet(), 40);
-	test.strictEqual(tests.MultiMixObject.mixin2Prop, 'aa');
+	test.strictEqual(tests.MultiMixObject.staticMixin2Prop, 'aa');
 	test.strictEqual(tests.MultiMixObject.staticMixin2Get(), 'bb');
 	test.strictEqual(multiMixObject.mixin2Prop, 'cc');
 	test.strictEqual(multiMixObject.mixin2Get(), 'dd');
+
+	test.done();
+};
+
+exports.mixinReplacePropertyExceptionTest = function(test) {
+	var tests = Joints.namespace('tests');
+
+	Joints.defineClass('tests.MyMixinReplace', {
+		__static: {
+			staticMixinProp: 10,
+			staticMixinGet: function() {
+				return 20;
+			}
+		},
+		mixinProp: 30,
+		mixinGet: function() {
+			return 40;
+		}
+	});
+
+	// Try replace property
+	test.throws(function() {
+		Joints.defineClass('tests.MyMixReplaceObject', {
+			__mixin: tests.MyMixinReplace,
+			mixinProp: 30
+		});
+	});
+
+	// Try replace method
+	test.throws(function() {
+		Joints.defineClass('tests.MyMixReplaceObject', {
+			__mixin: tests.MyMixinReplace,
+			mixinGet: function() {}
+		});
+	});
+
+	// Try replace static property
+	test.throws(function() {
+		Joints.defineClass('tests.MyMixReplaceObject', {
+			__mixin: tests.MyMixinReplace,
+			__static: {
+				staticMixinProp: 30
+			}
+		});
+	});
+
+	// Try replace static method
+	test.throws(function() {
+		Joints.defineClass('tests.MyMixReplaceObject', {
+			__mixin: tests.MyMixinReplace,
+			__static: {
+				staticMixinGet: function () {}
+			}
+		});
+	});
 
 	test.done();
 };

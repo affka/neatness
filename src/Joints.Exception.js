@@ -1,6 +1,7 @@
+
 module.exports = function(Joints) {
 
-	return Joints.defineClass('Joints.Exception', /** @lends Joints.Exception.prototype */{
+	return Joints.createClass('Joints.Exception', /** @lends Joints.Exception.prototype */{
 
 		__extends: Error,
 

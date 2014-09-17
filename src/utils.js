@@ -1,19 +1,21 @@
 var isEvalEnable = true;
+var Joints = require('./Joints');
 
 module.exports = {
 
 	/**
 	 * Extend class
-	 * @param {object} namespace
 	 * @param {object} nameObject
 	 * @param {object} parentNameObject
 	 * @param {function} [parentClass]
+	 * @param {function} [mixins]
 	 * @param {object} [prototypeProperties]
 	 * @param {object} [staticProperties]
 	 * @returns {function} New class
 	 */
-	extendClass: function (namespace, nameObject, parentNameObject, parentClass, prototypeProperties, staticProperties) {
+	extendClass: function (nameObject, parentNameObject, parentClass, mixins, prototypeProperties, staticProperties) {
 		parentClass = parentClass || this._noop;
+		mixins = mixins || [];
 
 		// The constructor function for the new subclass is either defined by you
 		// (the "constructor" property in your `extend` definition), or defaulted
@@ -35,7 +37,6 @@ module.exports = {
 		Surrogate.prototype = parentClass.prototype;
 
 		childClass.prototype = new Surrogate();
-		namespace[nameObject.name] = childClass; // @todo
 
 		// Copy objects from child prototype
 		for (var prop2 in parentClass.prototype) {
@@ -50,21 +51,38 @@ module.exports = {
 			this._extendWithSuper(childClass.prototype, prototypeProperties);
 		}
 
-		return childClass;
-	},
-
-	applyMixins: function(classFn, mixins) {
-		for (var mixin, i = 0, l = mixins.length; i < l; i++) {
-			mixin = mixins[i];
-
-			// Add static properties
-			for (var prop in mixin) {
-				if (classFn[prop]) {
-					throw new Error();
+		// Add prototype properties and methods from mixins
+		for (var i = 0, l = mixins.length; i < l; i++) {
+			for (var mixinProp in mixins[i].prototype) {
+				// Skip private
+				if (mixinProp.substr(0, 2) === '__') {
+					continue;
 				}
-				classFn[prop] = mixin[prop];
+
+				// Check for exists property or method. Mixin can only add properties, but no replace it
+				if (typeof childClass.prototype[mixinProp] === 'function' || childClass.prototype.hasOwnProperty(mixinProp)) {
+					throw new Error('Try to replace prototype property `' + mixinProp + '` in class `' + childClass.__className + '` by mixin `' + mixins[i].__className + '`');
+				}
+				childClass.prototype[mixinProp] = mixins[i].prototype[mixinProp];
 			}
 		}
+		// Add static properties and methods from mixins
+		for (var i = 0, l = mixins.length; i < l; i++) {
+			for (var mixinProp in mixins[i]) {
+				// Skip private
+				if (mixinProp.substr(0, 2) === '__') {
+					continue;
+				}
+
+				// Check for exists property or method. Mixin can only add properties, but no replace it
+				if (typeof childClass[mixinProp] === 'function' || childClass.hasOwnProperty(mixinProp)) {
+					throw new Error('Try to replace static property `' + mixinProp + '` in class `' + childClass.__className + '` by mixin `' + mixins[i].__className + '`');
+				}
+				childClass[mixinProp] = mixins[i][mixinProp];
+			}
+		}
+
+		return childClass;
 	},
 
 	_createFunction: function(nameObject, constructor) {

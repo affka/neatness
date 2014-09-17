@@ -1,9 +1,7 @@
+
 module.exports = function(Joints) {
 
-	/**
-	 * @class Joints.Object
-	 */
-	return Joints.defineClass('Joints.Object', {
+	return Joints.createClass('Joints.Object', {
 
 	});
 

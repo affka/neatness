@@ -13,7 +13,7 @@ var Joints = module.exports = {};
 
 // Web browser export
 if (typeof window !== 'undefined') {
-	window.Joints = exports;
+	window.Joints = Joints;
 }
 
 /**
@@ -66,6 +66,29 @@ Joints.namespace = function (name) {
  * @param {object} [staticProperties]
  * @return {object}
  */
+Joints.createClass = function (globalName, optionsOrExtend, prototypeProperties, staticProperties) {
+	var params = formats.parseFormat(globalName, optionsOrExtend, prototypeProperties, staticProperties);
+
+	// Show error if not defined extended class
+	if (params.parentClass !== null && typeof params.parentClass !== 'function') {
+		throw new Error('Not found extend class for `' + globalName + '`.');
+	}
+
+	var newClass = utils.extendClass(params.nameObject, params.parentNameObject, params.parentClass, params.mixins, params.prototypeProperties, params.staticProperties);
+	formats.applyClassConfig(newClass, params);
+
+	return newClass;
+};
+
+/**
+ * Method for define class
+ *
+ * @param {string} globalName
+ * @param {(function|object|null)} optionsOrExtend
+ * @param {object} [prototypeProperties]
+ * @param {object} [staticProperties]
+ * @return {object}
+ */
 Joints.defineClass = function (globalName, optionsOrExtend, prototypeProperties, staticProperties) {
 	var params = formats.parseFormat(globalName, optionsOrExtend, prototypeProperties, staticProperties);
 
@@ -74,9 +97,10 @@ Joints.defineClass = function (globalName, optionsOrExtend, prototypeProperties,
 		throw new Error('Not found extend class for `' + globalName + '`.');
 	}
 
-	var namespace = this.namespace(params.nameObject.namespace);
-	var newClass = utils.extendClass(namespace, params.nameObject, params.parentNameObject, params.parentClass, params.prototypeProperties, params.staticProperties);
+	var newClass = utils.extendClass(params.nameObject, params.parentNameObject, params.parentClass, params.mixins, params.prototypeProperties, params.staticProperties);
 	formats.applyClassConfig(newClass, params);
+
+	this.namespace(params.nameObject.namespace)[params.nameObject.name] = newClass;
 
 	return newClass;
 };
