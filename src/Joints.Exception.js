@@ -18,7 +18,9 @@ module.exports = function(Joints) {
 		extra: null,
 
 		/**
-		 * @class Joints.Exception
+		 * Base class for implement exception. This class extend from native Error and support
+		 * stack trace and message.
+		 * @constructs
 		 * @extends Error
 		 */
 		constructor: function (message) {

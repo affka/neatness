@@ -24,6 +24,7 @@ exports.extendsTest = function(test) {
 
 	// Define classes
 	Joints.defineClass('tests.BaseClass', {
+		__extends: Joints.Object,
 		__static: {
 			staticParamString: 'str1',
 			staticParamNumber: 10,
@@ -221,6 +222,7 @@ exports.formatsTest = function(test) {
 
 	// v1.0 format
 	Joints.defineClass('tests.name.FirstClass', {
+		__extends: Joints.Object
 	});
 	Joints.defineClass('tests.name.SecondClass', {
 		__extends: tests.name.FirstClass
@@ -231,8 +233,11 @@ exports.formatsTest = function(test) {
 
 	// Names
 	test.strictEqual(first.__className, 'tests.name.FirstClass');
+	test.strictEqual(first.className(), 'tests.name.FirstClass');
 	test.strictEqual(second.__className, 'tests.name.SecondClass');
+	test.strictEqual(second.className(), 'tests.name.SecondClass');
 	test.strictEqual(second.__parentClassName, 'tests.name.FirstClass');
+	test.strictEqual(second.parentClassName(), 'tests.name.FirstClass');
 
 	// Backbone format
 	// @todo
@@ -383,6 +388,22 @@ exports.mixinReplacePropertyExceptionTest = function(test) {
 			}
 		});
 	});
+
+	test.done();
+};
+
+exports.newContextTest = function(test) {
+	var t1 = Joints.namespace('t1');
+	Joints.defineClass('t1.MyClassInGlobalContext', {});
+
+	var MyJoints = Joints.newContext();
+	var t2 = MyJoints.namespace('t2');
+	MyJoints.defineClass('t2.MyClassInMyContext', {});
+
+	test.strictEqual(typeof t1.MyClassInGlobalContext, 'function');
+	test.strictEqual(typeof t2.MyClassInGlobalContext, 'undefined');
+	test.strictEqual(typeof t1.MyClassInMyContext, 'undefined');
+	test.strictEqual(typeof t2.MyClassInMyContext, 'function');
 
 	test.done();
 };

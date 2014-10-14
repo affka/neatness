@@ -1,26 +1,47 @@
 
-var utils = require('./utils');
+var extendClass = require('./extendClass');
 var formats = require('./formats');
-
-// Root namespace object
-var root = typeof window !== 'undefined' ? window : {};
 
 // For .noConflict() implementation
 var hasPreviousJoints = typeof window !== 'undefined' && window.hasOwnProperty('Joints');
 var previousJoints = hasPreviousJoints ? window.Joints : null;
 
-var Joints = module.exports = {};
+/**
+ * Joints class
+ * @function Joints
+ */
+var Joints = function() {
 
-// Web browser export
-if (typeof window !== 'undefined') {
-	window.Joints = Joints;
-}
+	/**
+	 *
+	 * @type {object}
+	 */
+	this.context = {};
+};
 
 /**
- *
+ * @function Joints.prototype.newContext
+ * @param {boolean} [removeGlobal] Set true for remove Joints object from window (browser global object)
  * @returns {Joints}
  */
-Joints.noConflict = function() {
+Joints.prototype.newContext = function(removeGlobal) {
+	removeGlobal = removeGlobal || false;
+
+	if (removeGlobal) {
+		this.noConflict();
+	}
+
+	return new Joints();
+};
+
+/**
+ * @function Joints.prototype.noConflict
+ * @returns {Joints}
+ */
+Joints.prototype.noConflict = function() {
+	// Root namespace object
+	var root = typeof window !== 'undefined' ? window : {};
+
 	if (hasPreviousJoints) {
 		root.Joints = previousJoints;
 	} else {
@@ -31,15 +52,15 @@ Joints.noConflict = function() {
 };
 
 /**
- *
+ * @function Joints.prototype.namespace
  * @param {string} name Full namespace name
  * @returns {object}
  */
-Joints.namespace = function (name) {
+Joints.prototype.namespace = function (name) {
 	name = name || '';
 
 	var nameParts = name.split('.');
-	var currentScope = root;
+	var currentScope = this.context;
 
 	// Find or create
 	for (var i = 0; i < nameParts.length; i++) {
@@ -59,58 +80,57 @@ Joints.namespace = function (name) {
 
 /**
  * Method for define class
- *
+ * @function Joints.prototype.createClass
  * @param {string} globalName
  * @param {(function|object|null)} optionsOrExtend
  * @param {object} [prototypeProperties]
  * @param {object} [staticProperties]
  * @return {object}
  */
-Joints.createClass = function (globalName, optionsOrExtend, prototypeProperties, staticProperties) {
+Joints.prototype.createClass = function (globalName, optionsOrExtend, prototypeProperties, staticProperties) {
 	var params = formats.parseFormat(globalName, optionsOrExtend, prototypeProperties, staticProperties);
 
 	// Show error if not defined extended class
-	if (params.parentClass !== null && typeof params.parentClass !== 'function') {
+	if (params[2] !== null && typeof params[2] !== 'function') {
 		throw new Error('Not found extend class for `' + globalName + '`.');
 	}
 
-	var newClass = utils.extendClass(params.nameObject, params.parentNameObject, params.parentClass, params.mixins, params.prototypeProperties, params.staticProperties);
-	formats.applyClassConfig(newClass, params);
+	var newClass = extendClass(params[0], params[1], params[2], params[6], params[3], params[4]);
+	formats.applyClassConfig(newClass, params[5], params[0], params[1]);
 
 	return newClass;
 };
 
 /**
  * Method for define class
- *
+ * @function Joints.prototype.defineClass
  * @param {string} globalName
  * @param {(function|object|null)} optionsOrExtend
  * @param {object} [prototypeProperties]
  * @param {object} [staticProperties]
  * @return {object}
  */
-Joints.defineClass = function (globalName, optionsOrExtend, prototypeProperties, staticProperties) {
-	var params = formats.parseFormat(globalName, optionsOrExtend, prototypeProperties, staticProperties);
+Joints.prototype.defineClass = function (globalName, optionsOrExtend, prototypeProperties, staticProperties) {
+	var newClass = this.createClass.apply(this, arguments);
+	var nameObject = formats.parseFullName(globalName);
 
-	// Show error if not defined extended class
-	if (params.parentClass !== null && typeof params.parentClass !== 'function') {
-		throw new Error('Not found extend class for `' + globalName + '`.');
-	}
-
-	var newClass = utils.extendClass(params.nameObject, params.parentNameObject, params.parentClass, params.mixins, params.prototypeProperties, params.staticProperties);
-	formats.applyClassConfig(newClass, params);
-
-	this.namespace(params.nameObject.namespace)[params.nameObject.name] = newClass;
-
+	this.namespace(nameObject.namespace)[nameObject.name] = newClass;
 	return newClass;
 };
 
-/**
- * @type {Joints.Object}
- */
-Joints.Object = require('./Joints.Object')(Joints);
+var joints = module.exports = new Joints();
+
+// Web browser export
+if (typeof window !== 'undefined') {
+	window.Joints = joints;
+}
 
 /**
- * @type {Joints.Exception}
+ * @type {Joints.prototype.Object}
  */
-Joints.Exception = require('./Joints.Exception')(Joints);
+Joints.prototype.Object = require('./Joints.Object')(joints);
+
+/**
+ * @type {Joints.prototype.Exception}
+ */
+Joints.prototype.Exception = require('./Joints.Exception')(joints);

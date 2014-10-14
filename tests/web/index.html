@@ -2,17 +2,26 @@
 <script>
 
 
-    Joints.defineClass('tests.web.BaseClass', {
-    });
-    Joints.defineClass('tests.web.MyClass', {
-        __extends: tests.web.BaseClass
-    });
+    (function() {
 
-    var obj = {
-        base: new tests.web.BaseClass,
-        myClass: new tests.web.MyClass()
-    };
+        var Joints = window.Joints.newContext(true);
+        var tests = Joints.namespace('tests');
 
-    console.log(obj);
+        Joints.defineClass('tests.web.BaseClass', {
+        });
+        Joints.defineClass('tests.web.MyClass', {
+            __extends: tests.web.BaseClass
+        });
+
+
+        var obj = {
+            base: new tests.web.BaseClass,
+            myClass: new tests.web.MyClass()
+        };
+
+        console.log(obj);
+
+    })();
+
 
 </script>
