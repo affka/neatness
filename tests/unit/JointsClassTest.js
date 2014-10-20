@@ -207,8 +207,12 @@ exports.formatsTest = function(test) {
 
 	var base = new tests.BaseFormat02Class();
 	var myFirst = new tests.MyFormat02Class();
+	test.strictEqual(base.__className, 'tests.BaseFormat02Class');
+	test.strictEqual(base.debugClassName, 'tests.BaseFormat02Class');
 	test.strictEqual(base.protoParam1, 'proto1');
 	test.strictEqual(base.protoParam2, undefined);
+	test.strictEqual(myFirst.__className, 'tests.MyFormat02Class');
+	test.strictEqual(myFirst.debugClassName, 'tests.MyFormat02Class');
 	test.strictEqual(myFirst.protoParam1, 'proto1');
 	test.strictEqual(myFirst.protoParam2, 'proto2');
 	test.strictEqual(tests.BaseFormat02Class.staticParam1, 'static1');
@@ -404,6 +408,33 @@ exports.newContextTest = function(test) {
 	test.strictEqual(typeof t2.MyClassInGlobalContext, 'undefined');
 	test.strictEqual(typeof t1.MyClassInMyContext, 'undefined');
 	test.strictEqual(typeof t2.MyClassInMyContext, 'function');
+
+	test.done();
+};
+
+exports.instanceNameTest = function(test) {
+	// Init namespace
+	var tests = Joints.namespace('tests');
+
+	// Define class
+	Joints.defineClass('tests.unit.InstTestClass', {});
+
+	var instTestClass = new tests.unit.InstTestClass();
+	test.strictEqual(/^tests\.unit\.InstTestClass[0-9]+$/.test(instTestClass.__instanceName), true);
+
+	test.done();
+};
+
+exports.defineEnumTest = function(test) {
+	// Init namespace
+	var tests = Joints.namespace('tests');
+
+	// Define class
+	Joints.defineEnum('tests.unit.EnumTestClass', {
+		TEST: 'test'
+	});
+
+	test.strictEqual(tests.unit.EnumTestClass.TEST, 'test');
 
 	test.done();
 };

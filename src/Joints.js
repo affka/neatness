@@ -118,6 +118,21 @@ Joints.prototype.defineClass = function (globalName, optionsOrExtend, prototypeP
 	return newClass;
 };
 
+/**
+ * Method for define class
+ * @function Joints.prototype.defineClass
+ * @param {string} globalName
+ * @param {object} [staticProperties]
+ * @return {object}
+ */
+Joints.prototype.defineEnum = function (globalName, staticProperties) {
+	var newClass = this.createClass(globalName, null, {}, staticProperties);
+	var nameObject = formats.parseFullName(globalName);
+
+	this.namespace(nameObject.namespace)[nameObject.name] = newClass;
+	return newClass;
+};
+
 var joints = module.exports = new Joints();
 
 // Web browser export

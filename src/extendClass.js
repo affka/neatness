@@ -1,4 +1,5 @@
 var isEvalEnable = true;
+var instanceCounter = 0;
 
 var _noop = function() {
 };
@@ -106,7 +107,10 @@ module.exports = function (nameObject, parentNameObject, parentClass, mixins, pr
 	var constructor = prototypeProperties && prototypeProperties.hasOwnProperty('constructor') ?
 		_coverVirtual(prototypeProperties.constructor, parentClass) :
 		parentClass;
-	var childClass = _createFunction(nameObject, constructor);
+	var childClass = _createFunction(nameObject, function() {
+		this.__instanceName  = nameObject.globalName + instanceCounter++;
+		constructor.apply(this, arguments);
+	});
 
 	// Add static properties to the constructor function, if supplied.
 	for (var prop in parentClass) {

@@ -82,7 +82,7 @@ Usage for libraries
         });
     })();
 
-Full class define example
+Full class define example with jsdoc example
 ---
 
     Joints.defineClass('app.BaseUser', /** @lends app.BaseUser.prototype */{

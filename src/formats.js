@@ -72,6 +72,9 @@ module.exports = {
 	},
 
 	applyClassConfig: function(newClass, format, nameObject, parentNameObject) {
+		// Set __className for all formats
+		newClass.__className = newClass.prototype.__className = nameObject.globalName;
+
 		var classNameKey = format === FORMAT_JOINTS_V02 ? 'debugClassName' : '__className';
 		var parentClassNameKey = format === FORMAT_JOINTS_V02 ? '' : '__parentClassName';
 		var staticNameKey = format === FORMAT_JOINTS_V02 ? '_static' : '__static';

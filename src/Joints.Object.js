@@ -10,7 +10,7 @@ module.exports = function(Joints) {
 
 		/**
 		 * Full current class name with namespace
-		 * @example
+		 * @example Returns value example
 		 *  app.MyClass
 		 * @type {string}
 		 * @protected
@@ -18,8 +18,17 @@ module.exports = function(Joints) {
 		__className: null,
 
 		/**
+		 * Unique instance name
+		 * @example Returns value example
+		 *  app.MyClass50
+		 * @type {string}
+		 * @protected
+		 */
+		__instanceName: null,
+
+		/**
 		 * Full parent (extends) class name with namespace
-		 * @example
+		 * @example Returns value example
 		 *  app.MyBaseClass
 		 * @type {string}
 		 * @protected
@@ -34,6 +43,16 @@ module.exports = function(Joints) {
 		 */
 		className: function() {
 			return this.__className;
+		},
+
+		/**
+		 * Returns unique instance name
+		 * @example
+		 *  app.MyClass
+		 * @returns {string}
+		 */
+		classInstanceName: function() {
+			return this.__instanceName;
 		},
 
 		/**
