@@ -65,7 +65,7 @@ module.exports = function(Joints) {
 
 		/**
 		 * Full current class name with namespace
-		 * @example
+		 * @example Returns value example
 		 *  app.MyClass
 		 * @type {string}
 		 * @protected
@@ -73,8 +73,17 @@ module.exports = function(Joints) {
 		__className: null,
 
 		/**
+		 * Unique instance name
+		 * @example Returns value example
+		 *  app.MyClass50
+		 * @type {string}
+		 * @protected
+		 */
+		__instanceName: null,
+
+		/**
 		 * Full parent (extends) class name with namespace
-		 * @example
+		 * @example Returns value example
 		 *  app.MyBaseClass
 		 * @type {string}
 		 * @protected
@@ -89,6 +98,16 @@ module.exports = function(Joints) {
 		 */
 		className: function() {
 			return this.__className;
+		},
+
+		/**
+		 * Returns unique instance name
+		 * @example
+		 *  app.MyClass
+		 * @returns {string}
+		 */
+		classInstanceName: function() {
+			return this.__instanceName;
 		},
 
 		/**
@@ -234,6 +253,21 @@ Joints.prototype.defineClass = function (globalName, optionsOrExtend, prototypeP
 	return newClass;
 };
 
+/**
+ * Method for define class
+ * @function Joints.prototype.defineClass
+ * @param {string} globalName
+ * @param {object} [staticProperties]
+ * @return {object}
+ */
+Joints.prototype.defineEnum = function (globalName, staticProperties) {
+	var newClass = this.createClass(globalName, null, {}, staticProperties);
+	var nameObject = formats.parseFullName(globalName);
+
+	this.namespace(nameObject.namespace)[nameObject.name] = newClass;
+	return newClass;
+};
+
 var joints = module.exports = new Joints();
 
 // Web browser export
@@ -253,6 +287,7 @@ Joints.prototype.Exception = require('./Joints.Exception')(joints);
 
 },{"./Joints.Exception":2,"./Joints.Object":3,"./extendClass":5,"./formats":6}],5:[function(require,module,exports){
 var isEvalEnable = true;
+var instanceCounter = 0;
 
 var _noop = function() {
 };
@@ -360,7 +395,10 @@ module.exports = function (nameObject, parentNameObject, parentClass, mixins, pr
 	var constructor = prototypeProperties && prototypeProperties.hasOwnProperty('constructor') ?
 		_coverVirtual(prototypeProperties.constructor, parentClass) :
 		parentClass;
-	var childClass = _createFunction(nameObject, constructor);
+	var childClass = _createFunction(nameObject, function() {
+		this.__instanceName  = nameObject.globalName + instanceCounter++;
+		constructor.apply(this, arguments);
+	});
 
 	// Add static properties to the constructor function, if supplied.
 	for (var prop in parentClass) {
@@ -497,6 +535,9 @@ module.exports = {
 	},
 
 	applyClassConfig: function(newClass, format, nameObject, parentNameObject) {
+		// Set __className for all formats
+		newClass.__className = newClass.prototype.__className = nameObject.globalName;
+
 		var classNameKey = format === FORMAT_JOINTS_V02 ? 'debugClassName' : '__className';
 		var parentClassNameKey = format === FORMAT_JOINTS_V02 ? '' : '__parentClassName';
 		var staticNameKey = format === FORMAT_JOINTS_V02 ? '_static' : '__static';
