@@ -3,26 +3,36 @@ Joints
 
 Joints - Full-Stack library for implementation OOP-style classes in JavaScript.
 
+```js
+	Joints.defineClass('MyClass', {
+	    name: 'Ivan'
+	});
+	
+	var myClass = new MyClass();
+	console.log(myClass.name); // Ivan
+```
+
+----------------------------
 
 Supported features
 ---
 
-  - Namespaces
-  - Simple extends
-  - Mixins
-  - Static properties and methods
-  - Usage objects as class properties with true extends
-  - Easy call parent method via this.__super()
+### Namespaces
+Set full class name (with namespace) for auto create namespace hierarchy.
+Namespace in Joints - is normal object, you can access to namespace items
+via simple navigation `my.namespace` or via `Joints.namespace('my.namespace')` method:
+```js
+	Joints.defineClass('my.namespace.MyClass', {
+	    name: 'Ivan'
+	});
+	
+	var namespace = Joints.namespace('my.namespace');
+	var myClass = new my.namespace.MyClass();
+```
 
-Basic classes (bonus)
----
-
-  - Joints.Object - base class for any you class. This class has not implementation and need for improvement navigation in IDE.
-  - Joints.Exception - base class for you exceptions. This class extended from native JavaScript Error function and detect true stacktrace and error name.
-
-Simple example
----
-
+### Simple extends
+Joints supported simple (not multi) extends prototype and static properties and methods.
+```js
     var Joints = require('joints');
     var app = Joints.namespace('app');
 
@@ -49,29 +59,113 @@ Simple example
 
 	var user = new app.models.Operator('Sebastian');
 	console.log(user.role); // operator
+```
+
+### Usage objects and arrays in class properties
+All objects and arrays in prototypes will be cloned in inherited objects. But in static - do not.
+```js
+	Joints.defineClass('app.models.Article', {
+		cateogories: ['news', 'other']
+	});
+	var article1 = new app.models.Article();
+	var article2 = new app.models.Article();
+	article1.categories.push('fun');
+	console.log(article2.categories); // ['news', 'other']
+```
+
+### Mixins
+Mixin - is a class without constructor. This structure have only prototype and static methods and properties.
+**Important!** Mixin can only add method and properties, by not overwrite. If you class and used mixin have duplicate methods or properties, will be throws exceptions.
+
+```js
+	Joints.defineClass('app.models.ViewMixin', {
+		getCategories: function() {
+		    return this.categories.join(', ');
+		}
+	});
+	Joints.defineClass('app.models.Article', {
+	    __mixin: app.models.ViewMixin,
+		cateogories: ['news', 'other']
+	});
+	
+	var article = new app.models.Article();
+	console.log(article.getCaegories()); // 'news, other'
+```
+
+### Static properties and methods
+```js
+	Joints.defineClass('app.models.Category', {
+	    __static: {
+    	    TYPE_FUN: 'fun',
+    		getAllTypes: function() {
+    		    return [ this.TYPE_FUN ];
+    		}
+	    }
+	});
+	
+	console.log(app.models.Category.getAllTypes()); // ['fun']
+```
+
+### Easy call parent method via this.__super()
+All methods in class have can call `__super()` method for call parent. **Notice:** You can use this call only for synchronous operations!
+```js
+	Joints.defineClass('app.Base', {
+		getText: function(name) {
+		    return 'Hello, ' + name + '.';
+		}
+	});
+	Joints.defineClass('app.HelloWorld', {
+	    __extends: app.Base,
+		getText: function(name) {
+		    return this.__super(name) + ' Good luck!';
+		}
+	});
+	
+	var helloWorld = new app.HelloWorld();
+	console.log(helloWorld.getText('John')); // 'Hello, John. Good luck!'
+```
+
+----------------------------
+
+Basic classes (bonus)
+---
+
+  - Joints.Object - base class for any you class. This class has not implementation and need for improvement navigation in IDE.
+  - Joints.Exception - base class for you exceptions. This class extended from native JavaScript Error function and detect true stacktrace and error name.
+
+----------------------------
 
 Usage in Node.js
 ---
 
 File `main.js`
 
+```js
     var Joints = require('joints');
     var app = Joints.namespace('app');
+```
+
 
 File `app/MyClass.js`
 
+```js
     var Joints = require('joints');
 
 	Joints.defineClass('app.MyClass', {
 	});
+```
+
+----------------------------
 
 Usage for libraries
 ---
 
+```js
     (function() {
         // Included Joints source code or Joints in globally
 
-        // Create new context, set `true` flag for remove Joints object from window (browser global object)
+        // Create new context, set `true` flag for remove Joints
+        // object from window (browser global object)
         var Joints = Joints.newContext(true);
 
         // Create namespace, which saved in created Joints context
@@ -81,10 +175,14 @@ Usage for libraries
         Joints.defineClass('app.MyClass', {
         });
     })();
+```
+
+----------------------------
 
 Full class define example with jsdoc example
 ---
 
+```js
     Joints.defineClass('app.BaseUser', /** @lends app.BaseUser.prototype */{
         __extends: Joints.Object,
         __static: /** @lends app.BaseUser */{
@@ -144,3 +242,4 @@ Full class define example with jsdoc example
             return this._name;
         }
     });
+```

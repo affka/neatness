@@ -119,7 +119,7 @@ Joints.prototype.defineClass = function (globalName, optionsOrExtend, prototypeP
 };
 
 /**
- * Method for define class
+ * Method for define enum
  * @function Joints.prototype.defineClass
  * @param {string} globalName
  * @param {object} [staticProperties]
