@@ -64,6 +64,12 @@ module.exports = function(Joints) {
 	return Joints.createClass('Joints.Object', {
 
 		/**
+		 * Link to used class. If you access to this property in extends classes, then you give top-level class.
+		 * @type {*}
+		 */
+		__static: null,
+
+		/**
 		 * Full current class name with namespace
 		 * @example Returns value example
 		 *  app.MyClass

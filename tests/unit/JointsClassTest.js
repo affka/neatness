@@ -468,3 +468,23 @@ exports.stringExtendAndMixinClassName = function(test) {
 
 	test.done();
 };
+
+
+exports.staticLinkTest = function(test) {
+	// Init namespace
+	var tests = Joints.namespace('tests');
+
+	Joints.defineClass('tests.SLBaseClass', {
+		isMy: function() {
+			return this.__static === tests.SLMyClass;
+		}
+	});
+	Joints.defineClass('tests.SLMyClass', {
+		__extends: tests.SLBaseClass
+	});
+
+	test.strictEqual((new tests.SLBaseClass()).isMy(), false);
+	test.strictEqual((new tests.SLMyClass()).isMy(), true);
+
+	test.done();
+};
