@@ -225,6 +225,17 @@ Joints.prototype.namespace = function (name) {
 Joints.prototype.createClass = function (globalName, optionsOrExtend, prototypeProperties, staticProperties) {
 	var params = formats.parseFormat(globalName, optionsOrExtend, prototypeProperties, staticProperties);
 
+	// Support extends and mixins as strings class names
+	if (typeof params[2] === 'string') {
+		params[2] = this.namespace(params[2]);
+	}
+	var mixins = params[6];
+	for (var i = 0, l = mixins.length; i < l; i++) {
+		if (typeof mixins[i] === 'string') {
+			mixins[i] = this.namespace(mixins[i]);
+		}
+	}
+
 	// Show error if not defined extended class
 	if (params[2] !== null && typeof params[2] !== 'function') {
 		throw new Error('Not found extend class for `' + globalName + '`.');
@@ -254,7 +265,7 @@ Joints.prototype.defineClass = function (globalName, optionsOrExtend, prototypeP
 };
 
 /**
- * Method for define class
+ * Method for define enum
  * @function Joints.prototype.defineClass
  * @param {string} globalName
  * @param {object} [staticProperties]
