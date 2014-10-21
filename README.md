@@ -152,6 +152,7 @@ File `app/MyClass.js`
     var Joints = require('joints');
 
 	Joints.defineClass('app.MyClass', {
+		__extends: 'app.BaseClass'
 	});
 ```
 

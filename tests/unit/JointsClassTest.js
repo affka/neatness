@@ -438,3 +438,33 @@ exports.defineEnumTest = function(test) {
 
 	test.done();
 };
+
+exports.stringExtendAndMixinClassName = function(test) {
+	// Init namespace
+	var tests = Joints.namespace('tests');
+
+	// Define class
+	Joints.defineClass('tests.strings.TestMixin1', {
+		MIX1: 1
+	});
+	Joints.defineClass('tests.strings.TestMixin2', {
+		MIX2: 2
+	});
+	Joints.defineClass('tests.strings.BaseClass', {
+		name: 'test'
+	});
+	Joints.defineClass('tests.strings.TestClass', {
+		__extends: 'tests.strings.BaseClass',
+		__mixins: [
+			'tests.strings.TestMixin1',
+			tests.strings.TestMixin2
+		]
+	});
+
+	var testClass = new tests.strings.TestClass();
+	test.strictEqual(testClass.MIX1, 1);
+	test.strictEqual(testClass.MIX2, 2);
+	test.strictEqual(testClass.name, 'test');
+
+	test.done();
+};
