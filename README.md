@@ -65,7 +65,7 @@ console.log(user.role); // operator
 All objects and arrays in prototypes will be cloned in inherited objects. But in static - do not.
 ```js
 Joints.defineClass('app.models.Article', {
-	cateogories: ['news', 'other']
+	categories: ['news', 'other']
 });
 var article1 = new app.models.Article();
 var article2 = new app.models.Article();
@@ -85,11 +85,11 @@ Joints.defineClass('app.models.ViewMixin', {
 });
 Joints.defineClass('app.models.Article', {
     __mixin: app.models.ViewMixin,
-	cateogories: ['news', 'other']
+	categories: ['news', 'other']
 });
 
 var article = new app.models.Article();
-console.log(article.getCaegories()); // 'news, other'
+console.log(article.getCategories()); // 'news, other'
 ```
 
 ### Static properties and methods
@@ -131,17 +131,17 @@ Documentation
 ---
 ### Joints.defineClass(className, options)
 - `className` Full defined class name with namespace.
-- `options` Object with prototype propetries and methods.
+- `options` Object with prototype properties and methods.
 - `options.__extends` Link to class or string class name of extends class.
 - `options.__mixin` Link to class or string class name of attached mixin.
 - `options.__mixins` Link to class or string class name of attached mixins.
 - `options.__static` Object with static properties and methods.
-- Mehtod returns current class
+- Method returns current class
 
 ### Joints.defineEnum(className, options)
 - `className` Full defined enum name with namespace.
 - `options` Key-value object.
-- Mehtod returns current enum
+- Method returns current enum
 
 ```js
 Joints.defineEnum('app.AnswersEnum', {
@@ -154,7 +154,7 @@ console.log(app.AnswerEnum.YES); // yes
 
 ### Joints.namespace(path)
 - `path` String of full namespace path
-- Method returns object of specifed namespace
+- Method returns object of specified namespace
 
 ### Joints.newContext(removeGlobal)
 - `removeGlobal` Boolean flag, set true for remove Joints object from window (browser global object)
