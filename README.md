@@ -55,7 +55,7 @@ Joints.defineClass('app.models.Operator', {
 
 var user = new app.models.User('John');
 console.log(user.role); // user
-console.log(user.name); // user
+console.log(user.name); // John
 
 var user = new app.models.Operator('Sebastian');
 console.log(user.role); // operator
