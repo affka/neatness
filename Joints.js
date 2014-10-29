@@ -305,7 +305,7 @@ Joints.prototype.Exception = require('./Joints.Exception')(joints);
 /**
  * @type {string}
  */
-Joints.prototype.version = '1.1';
+Joints.prototype.version = '1.1.0';
 
 },{"./Joints.Exception":2,"./Joints.Object":3,"./extendClass":5,"./formats":6}],5:[function(require,module,exports){
 var isEvalEnable = true;
