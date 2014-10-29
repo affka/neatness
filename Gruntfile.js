@@ -2,11 +2,14 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-browserify');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-text-replace');
 
-	grunt.registerTask('default', ['browserify', 'uglify', 'watch']);
+	grunt.registerTask('default', ['browserify', 'replace', 'uglify', 'watch']);
+
+	var pkg = grunt.file.readJSON('package.json');
 
 	grunt.initConfig({
-		pkg: grunt.file.readJSON('package.json'),
+		pkg: pkg,
 		browserify: {
 			bundleOptions: {
 				standalone: 'window'
@@ -14,6 +17,16 @@ module.exports = function(grunt) {
 			main: {
 				src: 'index.js',
 				dest: 'Joints.js'
+			}
+		},
+		replace: {
+			index: {
+				src: ['Joints.js'],
+				overwrite: true,
+				replacements: [{
+					from: '%JOINTS_CURRENT_VERSION%',
+					to: pkg.version
+				}]
 			}
 		},
 		uglify: {

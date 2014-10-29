@@ -243,63 +243,74 @@ Full class define example with jsdoc example
 ---
 
 ```js
-    Joints.defineClass('app.BaseUser', /** @lends app.BaseUser.prototype */{
-        __extends: Joints.Object,
-        __static: /** @lends app.BaseUser */{
-            /**
-             * @type {string}
-             */
-            text: 'my text',
-
-            /**
-             * @type {Array.<string|number>}
-             */
-            customList: ['zero', 1, 50],
-
-            /**
-             * @returns {number}
-             */
-            getNumber: function() {
-                return 3;
-            }
-        },
-
+Joints.defineClass('app.BaseUser', /** @lends app.BaseUser.prototype */{
+    __extends: Joints.Object,
+    __static: /** @lends app.BaseUser */{
         /**
          * @type {string}
          */
-        _name: null,
+        text: 'my text',
 
         /**
-         * @type {object}
+         * @type {Array.<string|number>}
          */
-        roleLabels: {
-            user: 'User',
-            operator: 'Operator'
-        },
+        customList: ['zero', 1, 50],
 
         /**
-         * @param {string} name User name
-         * @constructs
-         * @extends Joints.Object
+         * @returns {number}
          */
-        constructor: function(name) {
-            this._name = name;
-            this.__super(name);
+        getNumber: function() {
+            return 3;
         }
-    });
+    },
 
     /**
-     * @class app.MyUser
-     * @extends app.BaseUser
+     * @type {string}
      */
-    Joints.defineClass('app.MyUser', /** @lends app.MyUser.prototype */{
-        __extends: tests.BaseClass,
+    _name: null,
 
-        /**
-         * @returns {null|string}
-         */
-        getName: function() {
-            return this._name;
-        }
-    });
+    /**
+     * @type {object}
+     */
+    roleLabels: {
+        user: 'User',
+        operator: 'Operator'
+    },
+
+    /**
+     * @param {string} name User name
+     * @constructs
+     * @extends Joints.Object
+     */
+    constructor: function(name) {
+        this._name = name;
+        this.__super(name);
+    }
+});
+
+/**
+ * @class app.MyUser
+ * @extends app.BaseUser
+ */
+Joints.defineClass('app.MyUser', /** @lends app.MyUser.prototype */{
+    __extends: tests.BaseClass,
+
+    /**
+     * @returns {null|string}
+     */
+    getName: function() {
+        return this._name;
+    }
+});
+```
+
+----------------------------
+
+Unit tests
+---
+
+All library coverage in node unit tests. You can run it's by:
+
+```sh
+nodeunit tests/unit
 ```

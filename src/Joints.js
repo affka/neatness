@@ -160,3 +160,8 @@ Joints.prototype.Object = require('./Joints.Object')(joints);
  * @type {Joints.prototype.Exception}
  */
 Joints.prototype.Exception = require('./Joints.Exception')(joints);
+
+/**
+ * @type {string}
+ */
+Joints.prototype.version = '%JOINTS_CURRENT_VERSION%';
