@@ -62,6 +62,10 @@ Joints.prototype.namespace = function (name) {
 	var nameParts = name.split('.');
 	var currentScope = this.context;
 
+	if (!name) {
+		return currentScope;
+	}
+
 	// Find or create
 	for (var i = 0; i < nameParts.length; i++) {
 		var scopeName = nameParts[i];

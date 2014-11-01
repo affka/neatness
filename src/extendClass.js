@@ -30,7 +30,7 @@ var _createFunction = function(nameObject, constructor) {
 	}
 
 	var func;
-	var fullName = nameObject.namespace + '.' + name;
+	var fullName = (nameObject.namespace ? nameObject.namespace + '.' : '') + name;
 
 	fullName = fullName.replace(nameRegExp, '');
 	eval('func = ' + fullName + ' = function () { return constructor.apply(this, arguments); }');

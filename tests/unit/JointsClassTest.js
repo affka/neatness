@@ -469,7 +469,6 @@ exports.stringExtendAndMixinClassName = function(test) {
 	test.done();
 };
 
-
 exports.staticLinkTest = function(test) {
 	// Init namespace
 	var tests = Joints.namespace('tests');
@@ -485,6 +484,20 @@ exports.staticLinkTest = function(test) {
 
 	test.strictEqual((new tests.SLBaseClass()).isMy(), false);
 	test.strictEqual((new tests.SLMyClass()).isMy(), true);
+
+	test.done();
+};
+
+exports.withoutNamespace = function(test) {
+
+	var QweClass = Joints.defineClass('MyClass', {
+		isMy: function() {
+			return this.__static === tests.SLMyClass;
+		}
+	});
+
+	test.strictEqual(Joints.namespace('MyClass').__className, 'MyClass');
+	test.strictEqual(QweClass.__className, 'MyClass');
 
 	test.done();
 };
