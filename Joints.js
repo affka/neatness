@@ -203,6 +203,10 @@ Joints.prototype.namespace = function (name) {
 	var nameParts = name.split('.');
 	var currentScope = this.context;
 
+	if (!name) {
+		return currentScope;
+	}
+
 	// Find or create
 	for (var i = 0; i < nameParts.length; i++) {
 		var scopeName = nameParts[i];
@@ -305,7 +309,7 @@ Joints.prototype.Exception = require('./Joints.Exception')(joints);
 /**
  * @type {string}
  */
-Joints.prototype.version = '1.1.0';
+Joints.prototype.version = '1.1.2';
 
 },{"./Joints.Exception":2,"./Joints.Object":3,"./extendClass":5,"./formats":6}],5:[function(require,module,exports){
 var isEvalEnable = true;
@@ -340,7 +344,7 @@ var _createFunction = function(nameObject, constructor) {
 	}
 
 	var func;
-	var fullName = nameObject.namespace + '.' + name;
+	var fullName = (nameObject.namespace ? nameObject.namespace + '.' : '') + name;
 
 	fullName = fullName.replace(nameRegExp, '');
 	eval('func = ' + fullName + ' = function () { return constructor.apply(this, arguments); }');
