@@ -1,1 +1,1 @@
-module.exports = require('./src/Joints');
+module.exports = require('./src/Neatness');

@@ -1,10 +1,10 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-module.exports = require('./src/Joints');
-},{"./src/Joints":4}],2:[function(require,module,exports){
+module.exports = require('./src/Neatness');
+},{"./src/Neatness":4}],2:[function(require,module,exports){
 
-module.exports = function(Joints) {
+module.exports = function(Neatness) {
 
-	return Joints.createClass('Joints.Exception', /** @lends Joints.Exception.prototype */{
+	return Neatness.createClass('Neatness.Exception', /** @lends Neatness.Exception.prototype */{
 
 		__extends: Error,
 
@@ -54,14 +54,14 @@ module.exports = function(Joints) {
 };
 },{}],3:[function(require,module,exports){
 
-module.exports = function(Joints) {
+module.exports = function(Neatness) {
 
 	/**
 	 * Base class. Extend all you base classes from this class for true navigation in IDE
-	 * and support methods such as {@link Joints.Object#className}
-	 * @class Joints.Object
+	 * and support methods such as {@link Neatness.Object#className}
+	 * @class Neatness.Object
 	 */
-	return Joints.createClass('Joints.Object', {
+	return Neatness.createClass('Neatness.Object', {
 
 		/**
 		 * Link to used class. If you access to this property in extends classes, then you give top-level class.
@@ -144,14 +144,14 @@ var extendClass = require('./extendClass');
 var formats = require('./formats');
 
 // For .noConflict() implementation
-var hasPreviousJoints = typeof window !== 'undefined' && window.hasOwnProperty('Joints');
-var previousJoints = hasPreviousJoints ? window.Joints : null;
+var hasPreviousNeatness = typeof window !== 'undefined' && window.hasOwnProperty('Neatness');
+var previousNeatness = hasPreviousNeatness ? window.Neatness : null;
 
 /**
- * Joints class
- * @function Joints
+ * Neatness class
+ * @function Neatness
  */
-var Joints = function() {
+var Neatness = function() {
 
 	/**
 	 *
@@ -161,43 +161,43 @@ var Joints = function() {
 };
 
 /**
- * @function Joints.prototype.newContext
- * @param {boolean} [removeGlobal] Set true for remove Joints object from window (browser global object)
- * @returns {Joints}
+ * @function Neatness.prototype.newContext
+ * @param {boolean} [removeGlobal] Set true for remove Neatness object from window (browser global object)
+ * @returns {Neatness}
  */
-Joints.prototype.newContext = function(removeGlobal) {
+Neatness.prototype.newContext = function(removeGlobal) {
 	removeGlobal = removeGlobal || false;
 
 	if (removeGlobal) {
 		this.noConflict();
 	}
 
-	return new Joints();
+	return new Neatness();
 };
 
 /**
- * @function Joints.prototype.noConflict
- * @returns {Joints}
+ * @function Neatness.prototype.noConflict
+ * @returns {Neatness}
  */
-Joints.prototype.noConflict = function() {
+Neatness.prototype.noConflict = function() {
 	// Root namespace object
 	var root = typeof window !== 'undefined' ? window : {};
 
-	if (hasPreviousJoints) {
-		root.Joints = previousJoints;
+	if (hasPreviousNeatness) {
+		root.Neatness = previousNeatness;
 	} else {
-		delete root.Joints;
+		delete root.Neatness;
 	}
 
 	return this;
 };
 
 /**
- * @function Joints.prototype.namespace
+ * @function Neatness.prototype.namespace
  * @param {string} name Full namespace name
  * @returns {object}
  */
-Joints.prototype.namespace = function (name) {
+Neatness.prototype.namespace = function (name) {
 	name = name || '';
 
 	var nameParts = name.split('.');
@@ -225,14 +225,14 @@ Joints.prototype.namespace = function (name) {
 
 /**
  * Method for define class
- * @function Joints.prototype.createClass
+ * @function Neatness.prototype.createClass
  * @param {string} globalName
  * @param {(function|object|null)} optionsOrExtend
  * @param {object} [prototypeProperties]
  * @param {object} [staticProperties]
  * @return {object}
  */
-Joints.prototype.createClass = function (globalName, optionsOrExtend, prototypeProperties, staticProperties) {
+Neatness.prototype.createClass = function (globalName, optionsOrExtend, prototypeProperties, staticProperties) {
 	var params = formats.parseFormat(globalName, optionsOrExtend, prototypeProperties, staticProperties);
 
 	// Support extends and mixins as strings class names
@@ -259,14 +259,14 @@ Joints.prototype.createClass = function (globalName, optionsOrExtend, prototypeP
 
 /**
  * Method for define class
- * @function Joints.prototype.defineClass
+ * @function Neatness.prototype.defineClass
  * @param {string} globalName
  * @param {(function|object|null)} optionsOrExtend
  * @param {object} [prototypeProperties]
  * @param {object} [staticProperties]
  * @return {object}
  */
-Joints.prototype.defineClass = function (globalName, optionsOrExtend, prototypeProperties, staticProperties) {
+Neatness.prototype.defineClass = function (globalName, optionsOrExtend, prototypeProperties, staticProperties) {
 	var newClass = this.createClass.apply(this, arguments);
 	var nameObject = formats.parseFullName(globalName);
 
@@ -276,12 +276,12 @@ Joints.prototype.defineClass = function (globalName, optionsOrExtend, prototypeP
 
 /**
  * Method for define enum
- * @function Joints.prototype.defineClass
+ * @function Neatness.prototype.defineClass
  * @param {string} globalName
  * @param {object} [staticProperties]
  * @return {object}
  */
-Joints.prototype.defineEnum = function (globalName, staticProperties) {
+Neatness.prototype.defineEnum = function (globalName, staticProperties) {
 	var newClass = this.createClass(globalName, null, {}, staticProperties);
 	var nameObject = formats.parseFullName(globalName);
 
@@ -289,29 +289,29 @@ Joints.prototype.defineEnum = function (globalName, staticProperties) {
 	return newClass;
 };
 
-var joints = module.exports = new Joints();
+var neatness = module.exports = new Neatness();
 
 // Web browser export
 if (typeof window !== 'undefined') {
-	window.Joints = joints;
+	window.Neatness = neatness;
 }
 
 /**
- * @type {Joints.prototype.Object}
+ * @type {Neatness.prototype.Object}
  */
-Joints.prototype.Object = require('./Joints.Object')(joints);
+Neatness.prototype.Object = require('./Neatness.Object')(neatness);
 
 /**
- * @type {Joints.prototype.Exception}
+ * @type {Neatness.prototype.Exception}
  */
-Joints.prototype.Exception = require('./Joints.Exception')(joints);
+Neatness.prototype.Exception = require('./Neatness.Exception')(neatness);
 
 /**
  * @type {string}
  */
-Joints.prototype.version = '1.1.2';
+Neatness.prototype.version = '1.1.2';
 
-},{"./Joints.Exception":2,"./Joints.Object":3,"./extendClass":5,"./formats":6}],5:[function(require,module,exports){
+},{"./Neatness.Exception":2,"./Neatness.Object":3,"./extendClass":5,"./formats":6}],5:[function(require,module,exports){
 var isEvalEnable = true;
 var instanceCounter = 0;
 
@@ -487,8 +487,8 @@ module.exports = function (nameObject, parentNameObject, parentClass, mixins, pr
 };
 
 },{}],6:[function(require,module,exports){
-var FORMAT_JOINTS_V02 = 'joints_v02';
-var FORMAT_JOINTS_V10 = 'joints_v10';
+var FORMAT_JOINTS_V02 = 'neatness_v02';
+var FORMAT_JOINTS_V10 = 'neatness_v10';
 
 module.exports = {
 
@@ -509,7 +509,7 @@ module.exports = {
 		var format = null;
 		var mixins = [];
 
-		// Joints v0.2 (old) format
+		// Neatness v0.2 (old) format
 		if (optionsOrExtend === null || typeof optionsOrExtend === 'function') {
 			parentClass = optionsOrExtend;
 			prototypeProperties = protoProps;
@@ -520,7 +520,7 @@ module.exports = {
 				parentNameObject = this.parseFullName(parentClass.debugClassName);
 			}
 
-			// Joints v1.0 format
+			// Neatness v1.0 format
 		} else if (typeof optionsOrExtend === 'object') {
 			if (optionsOrExtend.hasOwnProperty('__extends')) {
 				parentClass = optionsOrExtend.__extends;

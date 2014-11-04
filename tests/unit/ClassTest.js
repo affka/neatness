@@ -1,12 +1,12 @@
-var Joints = require('../../index');
+var Neatness = require('../../index');
 
 exports.defineTest = function(test) {
 	// Init namespace
-	var tests = Joints.namespace('tests');
+	var tests = Neatness.namespace('tests');
 	test.strictEqual(typeof tests, 'object');
 
 	// Define class
-	var MyDefinedClass = Joints.defineClass('tests.unit.MyDefinedClass', {
+	var MyDefinedClass = Neatness.defineClass('tests.unit.MyDefinedClass', {
 	});
 
 	test.strictEqual(typeof tests.unit.MyDefinedClass, 'function');
@@ -20,11 +20,11 @@ exports.defineTest = function(test) {
 };
 
 exports.extendsTest = function(test) {
-	var tests = Joints.namespace('tests');
+	var tests = Neatness.namespace('tests');
 
 	// Define classes
-	Joints.defineClass('tests.BaseClass', {
-		__extends: Joints.Object,
+	Neatness.defineClass('tests.BaseClass', {
+		__extends: Neatness.Object,
 		__static: {
 			staticParamString: 'str1',
 			staticParamNumber: 10,
@@ -64,7 +64,7 @@ exports.extendsTest = function(test) {
 			return 5;
 		}
 	});
-	Joints.defineClass('tests.MyFirstClass', {
+	Neatness.defineClass('tests.MyFirstClass', {
 		__extends: tests.BaseClass,
 		__static: {
 			staticParamString: 'myStr1',
@@ -191,15 +191,15 @@ exports.extendsTest = function(test) {
 };
 
 exports.formatsTest = function(test) {
-	var tests = Joints.namespace('tests');
+	var tests = Neatness.namespace('tests');
 
 	// v0.2 format
-	Joints.defineClass('tests.BaseFormat02Class', null, {
+	Neatness.defineClass('tests.BaseFormat02Class', null, {
 		protoParam1: 'proto1'
 	}, {
 		staticParam1: 'static1'
 	});
-	Joints.defineClass('tests.MyFormat02Class', tests.BaseFormat02Class, {
+	Neatness.defineClass('tests.MyFormat02Class', tests.BaseFormat02Class, {
 		protoParam2: 'proto2'
 	}, {
 		staticParam2: 'static2'
@@ -225,10 +225,10 @@ exports.formatsTest = function(test) {
 	test.strictEqual(myFirst.debugClassName, 'tests.MyFormat02Class');
 
 	// v1.0 format
-	Joints.defineClass('tests.name.FirstClass', {
-		__extends: Joints.Object
+	Neatness.defineClass('tests.name.FirstClass', {
+		__extends: Neatness.Object
 	});
-	Joints.defineClass('tests.name.SecondClass', {
+	Neatness.defineClass('tests.name.SecondClass', {
 		__extends: tests.name.FirstClass
 	});
 
@@ -250,23 +250,23 @@ exports.formatsTest = function(test) {
 };
 
 exports.baseObjectTest = function(test) {
-	var tests = Joints.namespace('tests');
+	var tests = Neatness.namespace('tests');
 
 	// v1.0 format
-	Joints.defineClass('tests.MyObject', {
-		__extends: Joints.Object
+	Neatness.defineClass('tests.MyObject', {
+		__extends: Neatness.Object
 	});
 
 	var myObject = new tests.MyObject();
-	test.strictEqual(myObject instanceof Joints.Object, true);
+	test.strictEqual(myObject instanceof Neatness.Object, true);
 
 	test.done();
 };
 
 exports.mixinsTest = function(test) {
-	var tests = Joints.namespace('tests');
+	var tests = Neatness.namespace('tests');
 
-	Joints.defineClass('tests.MyMixin', {
+	Neatness.defineClass('tests.MyMixin', {
 		__static: {
 			staticMixinProp: 10,
 			staticMixinGet: function() {
@@ -280,7 +280,7 @@ exports.mixinsTest = function(test) {
 	});
 
 	// by __mixin property
-	Joints.defineClass('tests.MyMixObject1', {
+	Neatness.defineClass('tests.MyMixObject1', {
 		__mixins: tests.MyMixin
 	});
 
@@ -294,9 +294,9 @@ exports.mixinsTest = function(test) {
 };
 
 exports.multipleMixinsTest = function(test) {
-	var tests = Joints.namespace('tests');
+	var tests = Neatness.namespace('tests');
 
-	Joints.defineClass('tests.Mixin1', {
+	Neatness.defineClass('tests.Mixin1', {
 		__static: {
 			staticMixinProp: 10,
 			staticMixinGet: function() {
@@ -308,7 +308,7 @@ exports.multipleMixinsTest = function(test) {
 			return 40;
 		}
 	});
-	Joints.defineClass('tests.Mixin2', {
+	Neatness.defineClass('tests.Mixin2', {
 		__static: {
 			staticMixin2Prop: 'aa',
 			staticMixin2Get: function() {
@@ -321,7 +321,7 @@ exports.multipleMixinsTest = function(test) {
 		}
 	});
 
-	Joints.defineClass('tests.MultiMixObject', {
+	Neatness.defineClass('tests.MultiMixObject', {
 		__mixins: [
 			tests.Mixin1,
 			tests.Mixin2
@@ -342,9 +342,9 @@ exports.multipleMixinsTest = function(test) {
 };
 
 exports.mixinReplacePropertyExceptionTest = function(test) {
-	var tests = Joints.namespace('tests');
+	var tests = Neatness.namespace('tests');
 
-	Joints.defineClass('tests.MyMixinReplace', {
+	Neatness.defineClass('tests.MyMixinReplace', {
 		__static: {
 			staticMixinProp: 10,
 			staticMixinGet: function() {
@@ -359,7 +359,7 @@ exports.mixinReplacePropertyExceptionTest = function(test) {
 
 	// Try replace property
 	test.throws(function() {
-		Joints.defineClass('tests.MyMixReplaceObject', {
+		Neatness.defineClass('tests.MyMixReplaceObject', {
 			__mixin: tests.MyMixinReplace,
 			mixinProp: 30
 		});
@@ -367,7 +367,7 @@ exports.mixinReplacePropertyExceptionTest = function(test) {
 
 	// Try replace method
 	test.throws(function() {
-		Joints.defineClass('tests.MyMixReplaceObject', {
+		Neatness.defineClass('tests.MyMixReplaceObject', {
 			__mixin: tests.MyMixinReplace,
 			mixinGet: function() {}
 		});
@@ -375,7 +375,7 @@ exports.mixinReplacePropertyExceptionTest = function(test) {
 
 	// Try replace static property
 	test.throws(function() {
-		Joints.defineClass('tests.MyMixReplaceObject', {
+		Neatness.defineClass('tests.MyMixReplaceObject', {
 			__mixin: tests.MyMixinReplace,
 			__static: {
 				staticMixinProp: 30
@@ -385,7 +385,7 @@ exports.mixinReplacePropertyExceptionTest = function(test) {
 
 	// Try replace static method
 	test.throws(function() {
-		Joints.defineClass('tests.MyMixReplaceObject', {
+		Neatness.defineClass('tests.MyMixReplaceObject', {
 			__mixin: tests.MyMixinReplace,
 			__static: {
 				staticMixinGet: function () {}
@@ -397,12 +397,12 @@ exports.mixinReplacePropertyExceptionTest = function(test) {
 };
 
 exports.newContextTest = function(test) {
-	var t1 = Joints.namespace('t1');
-	Joints.defineClass('t1.MyClassInGlobalContext', {});
+	var t1 = Neatness.namespace('t1');
+	Neatness.defineClass('t1.MyClassInGlobalContext', {});
 
-	var MyJoints = Joints.newContext();
-	var t2 = MyJoints.namespace('t2');
-	MyJoints.defineClass('t2.MyClassInMyContext', {});
+	var MyNeatness = Neatness.newContext();
+	var t2 = MyNeatness.namespace('t2');
+	MyNeatness.defineClass('t2.MyClassInMyContext', {});
 
 	test.strictEqual(typeof t1.MyClassInGlobalContext, 'function');
 	test.strictEqual(typeof t2.MyClassInGlobalContext, 'undefined');
@@ -414,10 +414,10 @@ exports.newContextTest = function(test) {
 
 exports.instanceNameTest = function(test) {
 	// Init namespace
-	var tests = Joints.namespace('tests');
+	var tests = Neatness.namespace('tests');
 
 	// Define class
-	Joints.defineClass('tests.unit.InstTestClass', {});
+	Neatness.defineClass('tests.unit.InstTestClass', {});
 
 	var instTestClass = new tests.unit.InstTestClass();
 	test.strictEqual(/^tests\.unit\.InstTestClass[0-9]+$/.test(instTestClass.__instanceName), true);
@@ -427,10 +427,10 @@ exports.instanceNameTest = function(test) {
 
 exports.defineEnumTest = function(test) {
 	// Init namespace
-	var tests = Joints.namespace('tests');
+	var tests = Neatness.namespace('tests');
 
 	// Define class
-	Joints.defineEnum('tests.unit.EnumTestClass', {
+	Neatness.defineEnum('tests.unit.EnumTestClass', {
 		TEST: 'test'
 	});
 
@@ -441,19 +441,19 @@ exports.defineEnumTest = function(test) {
 
 exports.stringExtendAndMixinClassName = function(test) {
 	// Init namespace
-	var tests = Joints.namespace('tests');
+	var tests = Neatness.namespace('tests');
 
 	// Define class
-	Joints.defineClass('tests.strings.TestMixin1', {
+	Neatness.defineClass('tests.strings.TestMixin1', {
 		MIX1: 1
 	});
-	Joints.defineClass('tests.strings.TestMixin2', {
+	Neatness.defineClass('tests.strings.TestMixin2', {
 		MIX2: 2
 	});
-	Joints.defineClass('tests.strings.BaseClass', {
+	Neatness.defineClass('tests.strings.BaseClass', {
 		name: 'test'
 	});
-	Joints.defineClass('tests.strings.TestClass', {
+	Neatness.defineClass('tests.strings.TestClass', {
 		__extends: 'tests.strings.BaseClass',
 		__mixins: [
 			'tests.strings.TestMixin1',
@@ -471,14 +471,14 @@ exports.stringExtendAndMixinClassName = function(test) {
 
 exports.staticLinkTest = function(test) {
 	// Init namespace
-	var tests = Joints.namespace('tests');
+	var tests = Neatness.namespace('tests');
 
-	Joints.defineClass('tests.SLBaseClass', {
+	Neatness.defineClass('tests.SLBaseClass', {
 		isMy: function() {
 			return this.__static === tests.SLMyClass;
 		}
 	});
-	Joints.defineClass('tests.SLMyClass', {
+	Neatness.defineClass('tests.SLMyClass', {
 		__extends: tests.SLBaseClass
 	});
 
@@ -490,13 +490,13 @@ exports.staticLinkTest = function(test) {
 
 exports.withoutNamespace = function(test) {
 
-	var QweClass = Joints.defineClass('MyClass', {
+	var QweClass = Neatness.defineClass('MyClass', {
 		isMy: function() {
 			return this.__static === tests.SLMyClass;
 		}
 	});
 
-	test.strictEqual(Joints.namespace('MyClass').__className, 'MyClass');
+	test.strictEqual(Neatness.namespace('MyClass').__className, 'MyClass');
 	test.strictEqual(QweClass.__className, 'MyClass');
 
 	test.done();

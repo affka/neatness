@@ -1,7 +1,7 @@
 
-module.exports = function(Joints) {
+module.exports = function(Neatness) {
 
-	return Joints.createClass('Joints.Exception', /** @lends Joints.Exception.prototype */{
+	return Neatness.createClass('Neatness.Exception', /** @lends Neatness.Exception.prototype */{
 
 		__extends: Error,
 

@@ -1,12 +1,12 @@
 
-module.exports = function(Joints) {
+module.exports = function(Neatness) {
 
 	/**
 	 * Base class. Extend all you base classes from this class for true navigation in IDE
-	 * and support methods such as {@link Joints.Object#className}
-	 * @class Joints.Object
+	 * and support methods such as {@link Neatness.Object#className}
+	 * @class Neatness.Object
 	 */
-	return Joints.createClass('Joints.Object', {
+	return Neatness.createClass('Neatness.Object', {
 
 		/**
 		 * Link to used class. If you access to this property in extends classes, then you give top-level class.

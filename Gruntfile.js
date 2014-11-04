@@ -16,12 +16,12 @@ module.exports = function(grunt) {
 			},
 			main: {
 				src: 'index.js',
-				dest: 'Joints.js'
+				dest: 'Neatness.js'
 			}
 		},
 		replace: {
 			index: {
-				src: ['Joints.js'],
+				src: ['Neatness.js'],
 				overwrite: true,
 				replacements: [{
 					from: '%JOINTS_CURRENT_VERSION%',
@@ -36,7 +36,7 @@ module.exports = function(grunt) {
 			},
 			index: {
 				files: {
-					'Joints.min.js': ['Joints.js']
+					'Neatness.min.js': ['Neatness.js']
 				}
 			}
 		},

@@ -1,5 +1,5 @@
-var FORMAT_JOINTS_V02 = 'joints_v02';
-var FORMAT_JOINTS_V10 = 'joints_v10';
+var FORMAT_JOINTS_V02 = 'neatness_v02';
+var FORMAT_JOINTS_V10 = 'neatness_v10';
 
 module.exports = {
 
@@ -20,7 +20,7 @@ module.exports = {
 		var format = null;
 		var mixins = [];
 
-		// Joints v0.2 (old) format
+		// Neatness v0.2 (old) format
 		if (optionsOrExtend === null || typeof optionsOrExtend === 'function') {
 			parentClass = optionsOrExtend;
 			prototypeProperties = protoProps;
@@ -31,7 +31,7 @@ module.exports = {
 				parentNameObject = this.parseFullName(parentClass.debugClassName);
 			}
 
-			// Joints v1.0 format
+			// Neatness v1.0 format
 		} else if (typeof optionsOrExtend === 'object') {
 			if (optionsOrExtend.hasOwnProperty('__extends')) {
 				parentClass = optionsOrExtend.__extends;

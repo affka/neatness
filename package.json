@@ -1,7 +1,7 @@
 {
-  "name": "joints",
+  "name": "neatness",
   "version": "1.1.2",
-  "description": "Joints",
+  "description": "Neatness",
   "main": "index.js",
   "directories": {
     "test": "tests"
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/affka/joints"
+    "url": "https://github.com/affka/neatness"
   },
   "keywords": [
     "javascript",
@@ -24,9 +24,9 @@
   "author": "Vladimir Kozhin",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/affka/joints/issues"
+    "url": "https://github.com/affka/neatness/issues"
   },
-  "homepage": "https://github.com/affka/joints",
+  "homepage": "https://github.com/affka/neatness",
   "dependencies": {
     "nodeunit": "^0.9.0",
     "browserify": "latest",

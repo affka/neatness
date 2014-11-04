@@ -3,14 +3,14 @@ var extendClass = require('./extendClass');
 var formats = require('./formats');
 
 // For .noConflict() implementation
-var hasPreviousJoints = typeof window !== 'undefined' && window.hasOwnProperty('Joints');
-var previousJoints = hasPreviousJoints ? window.Joints : null;
+var hasPreviousNeatness = typeof window !== 'undefined' && window.hasOwnProperty('Neatness');
+var previousNeatness = hasPreviousNeatness ? window.Neatness : null;
 
 /**
- * Joints class
- * @function Joints
+ * Neatness class
+ * @function Neatness
  */
-var Joints = function() {
+var Neatness = function() {
 
 	/**
 	 *
@@ -20,43 +20,43 @@ var Joints = function() {
 };
 
 /**
- * @function Joints.prototype.newContext
- * @param {boolean} [removeGlobal] Set true for remove Joints object from window (browser global object)
- * @returns {Joints}
+ * @function Neatness.prototype.newContext
+ * @param {boolean} [removeGlobal] Set true for remove Neatness object from window (browser global object)
+ * @returns {Neatness}
  */
-Joints.prototype.newContext = function(removeGlobal) {
+Neatness.prototype.newContext = function(removeGlobal) {
 	removeGlobal = removeGlobal || false;
 
 	if (removeGlobal) {
 		this.noConflict();
 	}
 
-	return new Joints();
+	return new Neatness();
 };
 
 /**
- * @function Joints.prototype.noConflict
- * @returns {Joints}
+ * @function Neatness.prototype.noConflict
+ * @returns {Neatness}
  */
-Joints.prototype.noConflict = function() {
+Neatness.prototype.noConflict = function() {
 	// Root namespace object
 	var root = typeof window !== 'undefined' ? window : {};
 
-	if (hasPreviousJoints) {
-		root.Joints = previousJoints;
+	if (hasPreviousNeatness) {
+		root.Neatness = previousNeatness;
 	} else {
-		delete root.Joints;
+		delete root.Neatness;
 	}
 
 	return this;
 };
 
 /**
- * @function Joints.prototype.namespace
+ * @function Neatness.prototype.namespace
  * @param {string} name Full namespace name
  * @returns {object}
  */
-Joints.prototype.namespace = function (name) {
+Neatness.prototype.namespace = function (name) {
 	name = name || '';
 
 	var nameParts = name.split('.');
@@ -84,14 +84,14 @@ Joints.prototype.namespace = function (name) {
 
 /**
  * Method for define class
- * @function Joints.prototype.createClass
+ * @function Neatness.prototype.createClass
  * @param {string} globalName
  * @param {(function|object|null)} optionsOrExtend
  * @param {object} [prototypeProperties]
  * @param {object} [staticProperties]
  * @return {object}
  */
-Joints.prototype.createClass = function (globalName, optionsOrExtend, prototypeProperties, staticProperties) {
+Neatness.prototype.createClass = function (globalName, optionsOrExtend, prototypeProperties, staticProperties) {
 	var params = formats.parseFormat(globalName, optionsOrExtend, prototypeProperties, staticProperties);
 
 	// Support extends and mixins as strings class names
@@ -118,14 +118,14 @@ Joints.prototype.createClass = function (globalName, optionsOrExtend, prototypeP
 
 /**
  * Method for define class
- * @function Joints.prototype.defineClass
+ * @function Neatness.prototype.defineClass
  * @param {string} globalName
  * @param {(function|object|null)} optionsOrExtend
  * @param {object} [prototypeProperties]
  * @param {object} [staticProperties]
  * @return {object}
  */
-Joints.prototype.defineClass = function (globalName, optionsOrExtend, prototypeProperties, staticProperties) {
+Neatness.prototype.defineClass = function (globalName, optionsOrExtend, prototypeProperties, staticProperties) {
 	var newClass = this.createClass.apply(this, arguments);
 	var nameObject = formats.parseFullName(globalName);
 
@@ -135,12 +135,12 @@ Joints.prototype.defineClass = function (globalName, optionsOrExtend, prototypeP
 
 /**
  * Method for define enum
- * @function Joints.prototype.defineClass
+ * @function Neatness.prototype.defineClass
  * @param {string} globalName
  * @param {object} [staticProperties]
  * @return {object}
  */
-Joints.prototype.defineEnum = function (globalName, staticProperties) {
+Neatness.prototype.defineEnum = function (globalName, staticProperties) {
 	var newClass = this.createClass(globalName, null, {}, staticProperties);
 	var nameObject = formats.parseFullName(globalName);
 
@@ -148,24 +148,24 @@ Joints.prototype.defineEnum = function (globalName, staticProperties) {
 	return newClass;
 };
 
-var joints = module.exports = new Joints();
+var neatness = module.exports = new Neatness();
 
 // Web browser export
 if (typeof window !== 'undefined') {
-	window.Joints = joints;
+	window.Neatness = neatness;
 }
 
 /**
- * @type {Joints.prototype.Object}
+ * @type {Neatness.prototype.Object}
  */
-Joints.prototype.Object = require('./Joints.Object')(joints);
+Neatness.prototype.Object = require('./Neatness.Object')(neatness);
 
 /**
- * @type {Joints.prototype.Exception}
+ * @type {Neatness.prototype.Exception}
  */
-Joints.prototype.Exception = require('./Joints.Exception')(joints);
+Neatness.prototype.Exception = require('./Neatness.Exception')(neatness);
 
 /**
  * @type {string}
  */
-Joints.prototype.version = '%JOINTS_CURRENT_VERSION%';
+Neatness.prototype.version = '%JOINTS_CURRENT_VERSION%';
