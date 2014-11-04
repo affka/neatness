@@ -38,15 +38,19 @@ var _createFunction = function(nameObject, constructor) {
 	return func;
 };
 
-var _clone = function(obj) {
+var _clone = function(obj, orig) {
 	if (!obj || typeof obj !== "object") {
+		return obj;
+	}
+
+	if (obj === orig) {
 		return obj;
 	}
 
 	var copy = obj.constructor();
 	for (var key in obj) {
 		if (obj.hasOwnProperty(key)) {
-			copy[key] = _clone(obj[key]);
+			copy[key] = _clone(obj[key], orig || obj);
 		}
 	}
 	return copy;

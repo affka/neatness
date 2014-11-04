@@ -501,3 +501,17 @@ exports.withoutNamespace = function(test) {
 
 	test.done();
 };
+
+exports.cloneRecursive = function(test) {
+
+	var obj = {};
+	obj.sub = obj;
+
+	var QweClass = Neatness.defineClass('MyClass', {
+		a: obj
+	});
+
+	test.notStrictEqual(new QweClass().obj, obj);
+
+	test.done();
+};
