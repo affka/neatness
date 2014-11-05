@@ -309,7 +309,7 @@ Neatness.prototype.Exception = require('./Neatness.Exception')(neatness);
 /**
  * @type {string}
  */
-Neatness.prototype.version = '1.1.4';
+Neatness.prototype.version = '1.1.6';
 
 },{"./Neatness.Exception":2,"./Neatness.Object":3,"./extendClass":5,"./formats":6}],5:[function(require,module,exports){
 var isEvalEnable = true;
@@ -352,22 +352,26 @@ var _createFunction = function(nameObject, constructor) {
 	return func;
 };
 
-var _clone = function(obj, orig) {
+var _clone = function(obj) {
 	if (!obj || typeof obj !== "object") {
-		return obj;
-	}
-
-	if (obj === orig) {
 		return obj;
 	}
 
 	var copy = obj.constructor();
 	for (var key in obj) {
 		if (obj.hasOwnProperty(key)) {
-			copy[key] = _clone(obj[key], orig || obj);
+			copy[key] = _clone(obj[key]);
 		}
 	}
 	return copy;
+};
+
+var _cloneObjInProto = function(obj) {
+	for (var key in obj) {
+		if (typeof obj === "object") {
+			obj[key] = _clone(obj[key]);
+		}
+	}
 };
 
 var _coverVirtual = function (childMethod, parentMethod) {
@@ -426,6 +430,7 @@ module.exports = function (nameObject, parentNameObject, parentClass, mixins, pr
 		_coverVirtual(prototypeProperties.constructor, parentClass) :
 		parentClass;
 	var childClass = _createFunction(nameObject, function() {
+		_cloneObjInProto(this);
 		this.__instanceName  = nameObject.globalName + instanceCounter++;
 		constructor.apply(this, arguments);
 	});

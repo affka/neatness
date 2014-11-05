@@ -502,16 +502,20 @@ exports.withoutNamespace = function(test) {
 	test.done();
 };
 
-exports.cloneRecursive = function(test) {
+exports.objInProto = function(test) {
 
-	var obj = {};
-	obj.sub = obj;
-
-	var QweClass = Neatness.defineClass('MyClass', {
-		a: obj
+	var OIPClass = Neatness.defineClass('OIPClass', {
+		attr: {
+			name: null
+		}
 	});
 
-	test.notStrictEqual(new QweClass().obj, obj);
+	var oip1 = new OIPClass();
+	var oip2 = new OIPClass();
+	oip1.attr.name = 'Ivan';
+
+	test.strictEqual(oip1.attr.name, 'Ivan');
+	test.strictEqual(oip2.attr.name, null);
 
 	test.done();
 };
