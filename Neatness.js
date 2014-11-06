@@ -309,7 +309,7 @@ Neatness.prototype.Exception = require('./Neatness.Exception')(neatness);
 /**
  * @type {string}
  */
-Neatness.prototype.version = '1.1.6';
+Neatness.prototype.version = '1.1.7';
 
 },{"./Neatness.Exception":2,"./Neatness.Object":3,"./extendClass":5,"./formats":6}],5:[function(require,module,exports){
 var isEvalEnable = true;
@@ -352,8 +352,20 @@ var _createFunction = function(nameObject, constructor) {
 	return func;
 };
 
+var _isStrictObject = function (obj) {
+	if (!obj || typeof obj !== 'object' || obj instanceof RegExp || obj instanceof Date) {
+		return false;
+	}
+
+	var bool = true;
+	for (var key in obj) {
+		bool = bool && obj.hasOwnProperty(key);
+	}
+	return bool;
+};
+
 var _clone = function(obj) {
-	if (!obj || typeof obj !== "object") {
+	if (!_isStrictObject(obj)) {
 		return obj;
 	}
 
