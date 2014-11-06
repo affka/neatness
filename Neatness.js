@@ -309,7 +309,7 @@ Neatness.prototype.Exception = require('./Neatness.Exception')(neatness);
 /**
  * @type {string}
  */
-Neatness.prototype.version = '1.1.7';
+Neatness.prototype.version = '1.1.8';
 
 },{"./Neatness.Exception":2,"./Neatness.Object":3,"./extendClass":5,"./formats":6}],5:[function(require,module,exports){
 var isEvalEnable = true;
@@ -442,8 +442,10 @@ module.exports = function (nameObject, parentNameObject, parentClass, mixins, pr
 		_coverVirtual(prototypeProperties.constructor, parentClass) :
 		parentClass;
 	var childClass = _createFunction(nameObject, function() {
-		_cloneObjInProto(this);
-		this.__instanceName  = nameObject.globalName + instanceCounter++;
+		if (!this.__instanceName) {
+			_cloneObjInProto(this);
+			this.__instanceName  = nameObject.globalName + instanceCounter++;
+		}
 		constructor.apply(this, arguments);
 	});
 

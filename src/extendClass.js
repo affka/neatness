@@ -128,8 +128,10 @@ module.exports = function (nameObject, parentNameObject, parentClass, mixins, pr
 		_coverVirtual(prototypeProperties.constructor, parentClass) :
 		parentClass;
 	var childClass = _createFunction(nameObject, function() {
-		_cloneObjInProto(this);
-		this.__instanceName  = nameObject.globalName + instanceCounter++;
+		if (!this.__instanceName) {
+			_cloneObjInProto(this);
+			this.__instanceName  = nameObject.globalName + instanceCounter++;
+		}
 		constructor.apply(this, arguments);
 	});
 
