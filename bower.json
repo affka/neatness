@@ -1,0 +1,29 @@
+{
+  "name": "neatness",
+  "main": "Neatness.js",
+  "version": "1.1.8",
+  "homepage": "https://github.com/affka/neatness",
+  "authors": [
+    "Kozhin Vladimir <affka@affka.ru>"
+  ],
+  "description": "Neatness",
+  "moduleType": [
+    "yui"
+  ],
+  "keywords": [
+    "javascript",
+    "class",
+    "extend",
+    "namespace",
+    "mixin",
+    "oop"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
