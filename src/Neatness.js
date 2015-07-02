@@ -16,7 +16,9 @@ var Neatness = function() {
 	 *
 	 * @type {object}
 	 */
-	this.context = {};
+	this._context = {};
+
+	this._contextKeys = {};
 };
 
 /**
@@ -32,6 +34,26 @@ Neatness.prototype.newContext = function(removeGlobal) {
 	}
 
 	return new Neatness();
+};
+
+/**
+ * @function Neatness.prototype.moveContext
+ * @param {boolean} newContext New context object
+ * @param {boolean} [removeFromOld] Set true for remove keys from old context
+ * @returns {Neatness}
+ */
+Neatness.prototype.moveContext = function(newContext, removeFromOld) {
+	removeFromOld = removeFromOld || false;
+
+	for (var key in this._contextKeys) {
+		if (this._contextKeys.hasOwnProperty(key)) {
+			newContext[key] = this._context[key];
+			if (removeFromOld) {
+				delete this._context[key];
+			}
+		}
+	}
+	this._context = newContext;
 };
 
 /**
@@ -60,7 +82,7 @@ Neatness.prototype.namespace = function (name) {
 	name = name || '';
 
 	var nameParts = name.split('.');
-	var currentScope = this.context;
+	var currentScope = this._context;
 
 	if (!name) {
 		return currentScope;
@@ -69,6 +91,9 @@ Neatness.prototype.namespace = function (name) {
 	// Find or create
 	for (var i = 0; i < nameParts.length; i++) {
 		var scopeName = nameParts[i];
+		if (i === 0) {
+			this._contextKeys[scopeName] = true;
+		}
 
 		if (!currentScope[scopeName]) {
 			currentScope[scopeName] = {

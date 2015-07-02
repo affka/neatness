@@ -519,3 +519,32 @@ exports.objInProto = function(test) {
 
 	test.done();
 };
+
+exports.moveContext = function(test) {
+
+	Neatness.defineClass('aaa.bbb', {
+		__static: {
+			ccc: 1
+		}
+	});
+
+	test.strictEqual(Neatness.namespace('aaa').bbb.ccc, 1);
+
+	var newContext = {
+		sss: 222,
+		ddd: {
+			test: 1
+		}
+	};
+	Neatness.moveContext(newContext);
+
+	test.strictEqual(Neatness.namespace('aaa').bbb.ccc, 1);
+	test.strictEqual(Neatness.namespace('sss'), 222);
+
+	Neatness.moveContext({});
+
+	test.strictEqual(Neatness.namespace('aaa').bbb.ccc, 1);
+	test.equal(Neatness.namespace('ddd').test, null);
+
+	test.done();
+};
