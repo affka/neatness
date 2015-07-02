@@ -276,7 +276,7 @@ Neatness.prototype.createClass = function (globalName, optionsOrExtend, prototyp
 		throw new Error('Not found extend class for `' + globalName + '`.');
 	}
 
-	var newClass = extendClass(params[0], params[1], params[2], params[6], params[3], params[4]);
+	var newClass = extendClass(params[0], params[1], params[2], params[6], params[3], params[4], params[7]);
 	formats.applyClassConfig(newClass, params[5], params[0], params[1]);
 
 	return newClass;
@@ -334,7 +334,7 @@ Neatness.prototype.Exception = require('./Neatness.Exception')(neatness);
 /**
  * @type {string}
  */
-Neatness.prototype.version = '1.1.9';
+Neatness.prototype.version = '1.1.10';
 
 },{"./Neatness.Exception":2,"./Neatness.Object":3,"./extendClass":5,"./formats":6}],5:[function(require,module,exports){
 var isEvalEnable = true;
@@ -411,17 +411,17 @@ var _cloneObjInProto = function(obj) {
 	}
 };
 
-var _coverVirtual = function (childMethod, parentMethod) {
+var _coverVirtual = function (childMethod, parentMethod, superName) {
 	return function () {
-		var currentSuper = this.__super;
-		this.__super = parentMethod;
+		var currentSuper = this[superName];
+		this[superName] = parentMethod;
 		var r = childMethod.apply(this, arguments);
-		this.__super = currentSuper;
+		this[superName] = currentSuper;
 		return r;
 	};
 };
 
-var _extendWithSuper = function (childClass, newProperties) {
+var _extendWithSuper = function (childClass, newProperties, superName) {
 	if (!newProperties) {
 		return;
 	}
@@ -434,15 +434,15 @@ var _extendWithSuper = function (childClass, newProperties) {
 
 		var value = newProperties[key];
 		if (typeof value == 'function' && typeof childClass[key] == 'function' && childClass[key] !== _noop) {
-			childClass[key] = _coverVirtual(value, childClass[key]);
+			childClass[key] = _coverVirtual(value, childClass[key], superName);
 		} else {
 			childClass[key] = _clone(value);
 		}
 	}
 
 	// Default state
-	if (!childClass.__super) {
-		childClass.__super = _noop;
+	if (!childClass[superName]) {
+		childClass[superName] = _noop;
 	}
 };
 
@@ -456,7 +456,7 @@ var _extendWithSuper = function (childClass, newProperties) {
  * @param {object} [staticProperties]
  * @returns {function} New class
  */
-module.exports = function (nameObject, parentNameObject, parentClass, mixins, prototypeProperties, staticProperties) {
+module.exports = function (nameObject, parentNameObject, parentClass, mixins, prototypeProperties, staticProperties, superName) {
 	parentClass = parentClass || _noop;
 	mixins = mixins || [];
 
@@ -464,7 +464,7 @@ module.exports = function (nameObject, parentNameObject, parentClass, mixins, pr
 	// (the "constructor" property in your `extend` definition), or defaulted
 	// by us to simply call the parent's constructor.
 	var constructor = prototypeProperties && prototypeProperties.hasOwnProperty('constructor') ?
-		_coverVirtual(prototypeProperties.constructor, parentClass) :
+		_coverVirtual(prototypeProperties.constructor, parentClass, superName) :
 		parentClass;
 	var childClass = _createFunction(nameObject, function() {
 		if (!this.__instanceName) {
@@ -478,7 +478,7 @@ module.exports = function (nameObject, parentNameObject, parentClass, mixins, pr
 	for (var prop in parentClass) {
 		childClass[prop] = parentClass[prop];
 	}
-	_extendWithSuper(childClass, staticProperties);
+	_extendWithSuper(childClass, staticProperties, superName);
 
 	// Set the prototype chain to inherit from `parent`, without calling
 	// `parent`'s constructor function.
@@ -497,7 +497,7 @@ module.exports = function (nameObject, parentNameObject, parentClass, mixins, pr
 	// Add prototype properties (instance properties) to the subclass,
 	// if supplied.
 	if (prototypeProperties) {
-		_extendWithSuper(childClass.prototype, prototypeProperties);
+		_extendWithSuper(childClass.prototype, prototypeProperties, superName);
 	}
 
 	// Add prototype properties and methods from mixins
@@ -604,7 +604,8 @@ module.exports = {
 			prototypeProperties,
 			staticProperties,
 			format,
-			mixins
+			mixins,
+			format === FORMAT_JOINTS_V02 ? '_super' : '__super'
 		];
 	},
 

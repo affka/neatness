@@ -67,7 +67,8 @@ module.exports = {
 			prototypeProperties,
 			staticProperties,
 			format,
-			mixins
+			mixins,
+			format === FORMAT_JOINTS_V02 ? '_super' : '__super'
 		];
 	},
 

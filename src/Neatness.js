@@ -135,7 +135,7 @@ Neatness.prototype.createClass = function (globalName, optionsOrExtend, prototyp
 		throw new Error('Not found extend class for `' + globalName + '`.');
 	}
 
-	var newClass = extendClass(params[0], params[1], params[2], params[6], params[3], params[4]);
+	var newClass = extendClass(params[0], params[1], params[2], params[6], params[3], params[4], params[7]);
 	formats.applyClassConfig(newClass, params[5], params[0], params[1]);
 
 	return newClass;
