@@ -122,6 +122,9 @@ Neatness.prototype.createClass = function (globalName, optionsOrExtend, prototyp
 	// Support extends and mixins as strings class names
 	if (typeof params[2] === 'string') {
 		params[2] = this.namespace(params[2]);
+        if (!params[1] && params[2] && typeof params[2].__className === 'string') {
+            params[1] = formats.parseFullName(params[2].__className);
+        }
 	}
 	var mixins = params[6];
 	for (var i = 0, l = mixins.length; i < l; i++) {
