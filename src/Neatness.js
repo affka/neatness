@@ -3,8 +3,14 @@ var extendClass = require('./extendClass');
 var formats = require('./formats');
 
 // For .noConflict() implementation
-var hasPreviousNeatness = typeof window !== 'undefined' && window.hasOwnProperty('Neatness');
-var previousNeatness = hasPreviousNeatness ? window.Neatness : null;
+var hasPreviousNeatness = false;
+if (typeof window !== 'undefined') {
+    // IE kludge
+    hasPreviousNeatness = typeof window.hasOwnProperty !== 'undefined'
+        ? window.hasOwnProperty('Neatness')
+        : Object.prototype.hasOwnProperty.call(window, 'Neatness')
+}
+
 
 /**
  * Neatness class
@@ -67,7 +73,11 @@ Neatness.prototype.noConflict = function() {
 	if (hasPreviousNeatness) {
 		root.Neatness = previousNeatness;
 	} else {
-		delete root.Neatness;
+        // IE kludge
+        root['Neatness'] = undefined;
+        try {
+            delete root.Neatness;
+        } catch (e) {}
 	}
 
 	return this;
