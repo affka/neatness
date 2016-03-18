@@ -56,7 +56,11 @@ var _clone = function(obj) {
 	}
 
 	var copy = obj.constructor();
-	for (var key in obj) {
+    if (!copy) {
+        return obj;
+    }
+
+    for (var key in obj) {
 		if (obj.hasOwnProperty(key)) {
 			copy[key] = _clone(obj[key]);
 		}

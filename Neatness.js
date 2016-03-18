@@ -144,8 +144,14 @@ var extendClass = require('./extendClass');
 var formats = require('./formats');
 
 // For .noConflict() implementation
-var hasPreviousNeatness = typeof window !== 'undefined' && window.hasOwnProperty('Neatness');
-var previousNeatness = hasPreviousNeatness ? window.Neatness : null;
+var hasPreviousNeatness = false;
+if (typeof window !== 'undefined') {
+    // IE kludge
+    hasPreviousNeatness = typeof window.hasOwnProperty !== 'undefined'
+        ? window.hasOwnProperty('Neatness')
+        : Object.prototype.hasOwnProperty.call(window, 'Neatness')
+}
+
 
 /**
  * Neatness class
@@ -208,7 +214,11 @@ Neatness.prototype.noConflict = function() {
 	if (hasPreviousNeatness) {
 		root.Neatness = previousNeatness;
 	} else {
-		delete root.Neatness;
+        // IE kludge
+        root['Neatness'] = undefined;
+        try {
+            delete root.Neatness;
+        } catch (e) {}
 	}
 
 	return this;
@@ -263,6 +273,9 @@ Neatness.prototype.createClass = function (globalName, optionsOrExtend, prototyp
 	// Support extends and mixins as strings class names
 	if (typeof params[2] === 'string') {
 		params[2] = this.namespace(params[2]);
+        if (!params[1] && params[2] && typeof params[2].__className === 'string') {
+            params[1] = formats.parseFullName(params[2].__className);
+        }
 	}
 	var mixins = params[6];
 	for (var i = 0, l = mixins.length; i < l; i++) {
@@ -334,7 +347,7 @@ Neatness.prototype.Exception = require('./Neatness.Exception')(neatness);
 /**
  * @type {string}
  */
-Neatness.prototype.version = '1.1.10';
+Neatness.prototype.version = '1.1.13';
 
 },{"./Neatness.Exception":2,"./Neatness.Object":3,"./extendClass":5,"./formats":6}],5:[function(require,module,exports){
 var isEvalEnable = true;
@@ -395,7 +408,11 @@ var _clone = function(obj) {
 	}
 
 	var copy = obj.constructor();
-	for (var key in obj) {
+    if (!copy) {
+        return obj;
+    }
+
+    for (var key in obj) {
 		if (obj.hasOwnProperty(key)) {
 			copy[key] = _clone(obj[key]);
 		}
