@@ -4,11 +4,15 @@ var formats = require('./formats');
 
 // For .noConflict() implementation
 var hasPreviousNeatness = false;
+var previousNeatness = undefined;
 if (typeof window !== 'undefined') {
     // IE kludge
     hasPreviousNeatness = typeof window.hasOwnProperty !== 'undefined'
         ? window.hasOwnProperty('Neatness')
-        : Object.prototype.hasOwnProperty.call(window, 'Neatness')
+        : Object.prototype.hasOwnProperty.call(window, 'Neatness');
+    if (hasPreviousNeatness) {
+        previousNeatness = window.Neatness;
+    }
 }
 
 

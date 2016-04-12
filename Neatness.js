@@ -145,11 +145,15 @@ var formats = require('./formats');
 
 // For .noConflict() implementation
 var hasPreviousNeatness = false;
+var previousNeatness = undefined;
 if (typeof window !== 'undefined') {
     // IE kludge
     hasPreviousNeatness = typeof window.hasOwnProperty !== 'undefined'
         ? window.hasOwnProperty('Neatness')
-        : Object.prototype.hasOwnProperty.call(window, 'Neatness')
+        : Object.prototype.hasOwnProperty.call(window, 'Neatness');
+    if (hasPreviousNeatness) {
+        previousNeatness = window.Neatness;
+    }
 }
 
 
@@ -347,7 +351,7 @@ Neatness.prototype.Exception = require('./Neatness.Exception')(neatness);
 /**
  * @type {string}
  */
-Neatness.prototype.version = '1.1.13';
+Neatness.prototype.version = '1.1.14';
 
 },{"./Neatness.Exception":2,"./Neatness.Object":3,"./extendClass":5,"./formats":6}],5:[function(require,module,exports){
 var isEvalEnable = true;
