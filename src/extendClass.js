@@ -1,41 +1,42 @@
-var isEvalEnable = true;
 var instanceCounter = 0;
 
 var _noop = function() {
 };
 
 var _createFunction = function(nameObject, constructor) {
-  if (!isEvalEnable || !nameObject) {
-    return function () { return constructor.apply(this, arguments); }
+  if (process.env.NODE_ENV !== 'production') {
+  	if (nameObject) {
+	  var nameRegExp = /[^0-9a-z$_\.]/i;
+	  var name = nameObject.name || 'Function';
+	  var nameParts = nameObject.globalName.split('.');
+
+	  // Create root object
+	  var rootName = nameParts.shift();
+	  var cs = {};
+	  var fullCs = cs;
+
+	  rootName = rootName.replace(nameRegExp, '');
+
+	  // Create fake namespace object
+	  for (var i = 0; i < nameParts.length; i++) {
+		var scopeName = nameParts[i];
+		if (!cs[scopeName]) {
+		  cs[scopeName] = {};
+		}
+		cs = cs[scopeName];
+	  }
+
+	  var func;
+	  var fullName = (nameObject.namespace ? nameObject.namespace + '.' : '') + name;
+
+	  fullName = fullName.replace(nameRegExp, '');
+	  eval('var ' + rootName + ' = ' + JSON.stringify(fullCs) + '; func = ' + fullName + ' = function () { return constructor.apply(this, arguments); }');
+
+	  return func;
+	}
   }
 
-  var nameRegExp = /[^a-z$_\.]/i;
-  var name = nameObject.name || 'Function';
-  var nameParts = nameObject.globalName.split('.');
-
-  // Create root object
-  var rootName = nameParts.shift();
-  var cs = {};
-  var fullCs = cs;
-
-  rootName = rootName.replace(nameRegExp, '');
-
-  // Create fake namespace object
-  for (var i = 0; i < nameParts.length; i++) {
-    var scopeName = nameParts[i];
-    if (!cs[scopeName]) {
-      cs[scopeName] = {};
-    }
-    cs = cs[scopeName];
-  }
-
-  var func;
-  var fullName = (nameObject.namespace ? nameObject.namespace + '.' : '') + name;
-
-  fullName = fullName.replace(nameRegExp, '');
-  eval('var ' + rootName + ' = ' + JSON.stringify(fullCs) + '; func = ' + fullName + ' = function () { return constructor.apply(this, arguments); }');
-
-  return func;
+  return function () { return constructor.apply(this, arguments); }
 };
 
 var _isStrictObject = function (obj) {
