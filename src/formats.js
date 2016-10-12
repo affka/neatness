@@ -72,7 +72,7 @@ module.exports = {
 		];
 	},
 
-	applyClassConfig: function(newClass, format, nameObject, parentNameObject) {
+	applyClassConfig: function(newClass, format, nameObject, parentNameObject, parentClass) {
 		// Set __className for all formats
 		newClass.__className = newClass.prototype.__className = nameObject.globalName;
 
