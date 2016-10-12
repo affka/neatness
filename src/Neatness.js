@@ -153,7 +153,7 @@ Neatness.prototype.createClass = function (globalName, optionsOrExtend, prototyp
 	}
 
 	var newClass = extendClass(params[0], params[1], params[2], params[6], params[3], params[4], params[7]);
-	formats.applyClassConfig(newClass, params[5], params[0], params[1]);
+	formats.applyClassConfig(newClass, params[5], params[0], params[1], params[2]);
 
 	return newClass;
 };

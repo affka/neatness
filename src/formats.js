@@ -85,6 +85,7 @@ module.exports = {
 			newClass[parentClassNameKey] = newClass.prototype[parentClassNameKey] = parentNameObject ? (parentNameObject.globalName || null) : null;
 		}
 		newClass[staticNameKey] = newClass.prototype[staticNameKey] = newClass;
+		newClass.__parentClass = newClass.prototype.__parentClass = parentClass;
 
 		return newClass;
 	},
